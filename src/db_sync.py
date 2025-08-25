@@ -57,9 +57,9 @@ def db_sync():
     update_data(con, logger, minio_bucket, "RAW")
 
     # stage tables
-    # with open('SQL/staged.sql', 'r') as file:
-    #     staging_query = file.read()
-    # con.execute(staging_query)
+    with open('SQL/staged.sql', 'r') as file:
+        staging_query = file.read()
+    con.execute(staging_query)
 
     # cleaned tables
     # with open('SQL/cleaned.sql', 'r') as file:
