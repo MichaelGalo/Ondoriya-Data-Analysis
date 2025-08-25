@@ -64,37 +64,39 @@ def dashboard():
 
     st.markdown("---")
 
-    # Faction distribution
-    st.header("Faction Distribution")
-    faction_distribution_subsetted = df_faction_distribution[["Faction", "Percent"]].copy()
-    faction_distribution_subsetted["Percent_numeric"] = pd.to_numeric(
-        faction_distribution_subsetted["Percent"].astype(str)
-            .str.replace("%", "", regex=False)
-            .str.replace(",", "", regex=False)
-            .str.strip(),
-        errors="coerce",
-    )
-    faction_distribution_subsetted = faction_distribution_subsetted.sort_values(by="Percent_numeric", ascending=False).reset_index(drop=True)
-    faction_distribution_subsetted["Percent_display"] = faction_distribution_subsetted["Percent_numeric"].map(
-        lambda value: f"{value:.2f}%"
-    )
-    st.dataframe(faction_distribution_subsetted[["Faction", "Percent_display"]].rename(columns={"Percent_display": "Percent"}))
+    # show Faction distribution and Top 5 regions side-by-side
+    left_column, right_column = st.columns(2)
 
+    with left_column:
+        # Faction distribution
+        st.header("Faction Distribution")
+        faction_distribution_subsetted = df_faction_distribution[["Faction", "Percent"]].copy()
+        faction_distribution_subsetted["Percent_numeric"] = pd.to_numeric(
+            faction_distribution_subsetted["Percent"].astype(str)
+                .str.replace("%", "", regex=False)
+                .str.replace(",", "", regex=False)
+                .str.strip(),
+            errors="coerce",
+        )
+        faction_distribution_subsetted = faction_distribution_subsetted.sort_values(by="Percent_numeric", ascending=False).reset_index(drop=True)
+        faction_distribution_subsetted["Percent_display"] = faction_distribution_subsetted["Percent_numeric"].map(
+            lambda value: f"{value:.2f}%"
+        )
+        st.dataframe(faction_distribution_subsetted[["Faction", "Percent_display"]].rename(columns={"Percent_display": "Percent"}))
 
-    st.markdown("---")
+    with right_column:
+        # Top 5 regions
+        st.header("Top 5 Most Populous Regions")
+        region_column = "Colloquial_Name"
+        population_column = "population"
+        simple_top_df = df_top_5_regions[[region_column, population_column]].dropna().rename(columns=lambda column_name: str(column_name))
+        top_chart = alt.Chart(simple_top_df).mark_bar().encode(
+            x=alt.X(str(population_column), title="Population"),
+            y=alt.Y(str(region_column), sort='-x', title="Region"),
+        ).properties(height=300)
+        st.altair_chart(top_chart, use_container_width=True)
 
-    # Top 5 regions
-    st.header("Top 5 Most Populous Regions")
-    region_column = "Colloquial_Name"
-    population_column = "population"
-    simple_top_df = df_top_5_regions[[region_column, population_column]].dropna().rename(columns=lambda c: str(c))
-    top_chart = alt.Chart(simple_top_df).mark_bar().encode(
-        x=alt.X(str(population_column), title="Population"),
-        y=alt.Y(str(region_column), sort='-x', title="Region"),
-    ).properties(height=300)
-    st.altair_chart(top_chart, use_container_width=True)
-
-    st.markdown("---")
+    
 
 if __name__ == "__main__":
     dashboard()
