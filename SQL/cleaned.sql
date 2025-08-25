@@ -13,6 +13,7 @@ ORDER BY max_percent DESC
 LIMIT 1 OFFSET 1; -- offset to avoid the total
 
 -- Visualization: Population Density by Region
+CREATE TABLE IF NOT EXISTS CLEANED.POPULATION_DENSITY AS
 SELECT
     r.Colloquial_Name,
     COUNT(p.id) AS population
@@ -30,7 +31,8 @@ SELECT
     Faction,
     Regions,
     Percent
-FROM STAGED.FACTION_DISTRIBUTION;
+FROM STAGED.FACTION_DISTRIBUTION
+ORDER BY Percent DESC;
 
 -- Visualization: Top 5 Most Populous Regions
     -- use regions and people
