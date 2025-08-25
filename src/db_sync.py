@@ -62,9 +62,9 @@ def db_sync():
     con.execute(staging_query)
 
     # cleaned tables
-    # with open('SQL/cleaned.sql', 'r') as file:
-    #     cleaning_query = file.read()
-    # con.execute(cleaning_query)
+    with open('SQL/cleaned.sql', 'r') as file:
+        cleaning_query = file.read()
+    con.execute(cleaning_query)
 
     con.close()
     logger.info("Database connection closed")
