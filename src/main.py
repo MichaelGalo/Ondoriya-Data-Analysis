@@ -4,13 +4,12 @@ import duckdb
 duckdb.install_extension("ducklake")
 duckdb.load_extension("ducklake")
 
-con = duckdb.connect("my_ducklake.db")
-# Attach ducklake to the absolute path of my_ducklake.db & add a (DATA_PATH example/path)
-# con.execute("ATTACH 'ducklake:my_ducklake.db' AS my_lake")
+con = duckdb.connect("ondoriya.db")
+con.execute("ATTACH 'ducklake:ondoriya.db' AS my_lake")
 
-con.execute("CREATE SCHEMA IF NOT EXISTS BRONZE")
-con.execute("CREATE SCHEMA IF NOT EXISTS SILVER")
-con.execute("CREATE SCHEMA IF NOT EXISTS GOLD")
+con.execute("CREATE SCHEMA IF NOT EXISTS RAW")
+con.execute("CREATE SCHEMA IF NOT EXISTS STAGED")
+con.execute("CREATE SCHEMA IF NOT EXISTS CLEANED")
 
 # example query
 # with open ("sql/query.sql", "r") as f:

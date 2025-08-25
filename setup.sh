@@ -402,7 +402,7 @@ EOL
 cd $PROJECT_ROOT
 python3 -m uv init
 
-uv add pytest ruff dotenv duckdb polars minio
+uv add pytest ruff dotenv duckdb polars minio streamlit
 
 source .venv/bin/activate
 
